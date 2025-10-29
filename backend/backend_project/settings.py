@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "replace-this-with-a-secure-secret-in-prod"
 
-DEBUG = True
+DEBUG = False   
 
 ALLOWED_HOSTS = ["*"]
 
@@ -60,13 +60,14 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = []
-
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Africa/Cairo"
 USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 

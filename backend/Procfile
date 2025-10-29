@@ -1,0 +1,1 @@
+web: gunicorn eskan_com.wsgi
