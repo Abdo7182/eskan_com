@@ -1,0 +1,6 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+
+[start]
+cmd = "gunicorn backend_project.wsgi"
