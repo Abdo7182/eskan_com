@@ -6,6 +6,7 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { SearchFilters } from "@/components/SearchFilters";
 import { useSearchParams } from "react-router-dom";
 import { API_URL } from "@/config";
+import { mockProperties } from "@/data/properties";
 
 // 👇 تعريف نوع العقار اللي بيجي من Django
 interface Property {
@@ -32,30 +33,21 @@ const Properties: React.FC = () => {
   // 🔹 جلب العقارات من الـ API
   useEffect(() => {
     setLoading(true);
-    axios
-      .get(`${API_URL}/properties/`)
-      .then((res) => {
-        const data = Array.isArray(res.data)
-          ? res.data
-          : res.data.results || [];
-
-        // ✅ لو في initialArea نفلتر بناءً عليها
-        const filtered = initialArea
-          ? data.filter(
-              (p) =>
-                p.area &&
-                (p.area.name === initialArea ||
-                  p.area.id?.toString() === initialArea)
-            )
-          : data;
-
-        setProperties(data);
-        setFilteredProperties(filtered);
-      })
-      .catch((err) => console.error("❌ Error fetching properties:", err))
-      .finally(() => setLoading(false));
+    // Use mock properties directly
+    const data = mockProperties;
+    setProperties(data);
+    setFilteredProperties(
+      initialArea
+        ? data.filter(
+            (p) =>
+              p.area &&
+              (p.area.name === initialArea ||
+                p.area.id?.toString() === initialArea)
+          )
+        : data
+    );
+    setLoading(false);
   }, [initialArea]);
-
   // 🔍 وظيفة البحث والفلترة
   const handleSearch = (filters: any) => {
     setFilters(filters);
