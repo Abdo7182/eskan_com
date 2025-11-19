@@ -154,17 +154,43 @@ export const mockProperties: Property[] = [
 ];
 
 export const fetchProperties = async (): Promise<Property[]> => {
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-
-    try {
-          const response = await fetch(`${apiBaseUrl}/properties/`);
-          if (!response.ok) {
-                  throw new Error('Failed to fetch properties');
-                }
-          const data = await response.json();
-          return data;
-        } catch (error) {
-          console.error('Error fetching properties:', error);
-          return [];
-        }
-  };
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  
+  try {
+    const response = await fetch(`${apiBaseUrl}/properties/`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch properties');
+    }
+    
+    const data = await response.json();
+    console.log('API Response:', data);
+    
+    // تحويل بيانات الـ API إلى صيغة Property المتوقعة
+    const transformedData = data.map((property: any) => ({
+      id: property.id,
+      name: property.name,
+      nameEn: property.name_en || '',
+      area: typeof property.area === 'string' ? property.area : property.area?.name || '',
+      address: property.address,
+      price: property.price ? parseFloat(property.price) : 0,
+      rooms: property.rooms,
+      bathrooms: property.bathrooms,
+      size: property.size,
+      floor: property.floor,
+      furnished: property.furnished,
+      type: property.type,
+      typeEn: property.type_en || '',
+      images: property.images?.map((img: any) => img.image_url || img) || [],
+      description: property.description,
+      descriptionEn: property.description_en || '',
+      contact: property.contact,
+      featured: property.featured,
+    }));
+    
+    console.log('Transformed data:', transformedData);
+    return transformedData;
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    return [];
+  }
+};
