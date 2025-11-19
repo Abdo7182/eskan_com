@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Building2, Shield, Clock, Award } from "lucide-react";
 import { alexandriaAreas } from "@/data/properties";
 import { Link } from "react-router-dom";
-import { fetchProperties } from "@/api";
+import { fetchProperties } from "@/data/properties";
 import { Property as PropertyType } from "@/data/properties";
 
 const Index = () => {
