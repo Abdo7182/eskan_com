@@ -30,7 +30,7 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
         <img
           src={
             property.images?.length > 0
-              ? property.images[0].image_url
+              ? property.images[0]
               : "/default.jpg"
           }
           alt={property.name}
