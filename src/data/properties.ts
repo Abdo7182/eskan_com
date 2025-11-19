@@ -191,6 +191,6 @@ export const fetchProperties = async (): Promise<Property[]> => {
     return transformedData;
   } catch (error) {
     console.error('Error fetching properties:', error);
-    return [];
+    return mockProperties;
   }
 };
