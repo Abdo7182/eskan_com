@@ -152,3 +152,19 @@ export const mockProperties: Property[] = [
     featured: false
   }
 ];
+
+export const fetchProperties = async (): Promise<Property[]> => {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
+    try {
+          const response = await fetch(`${apiBaseUrl}/properties/`);
+          if (!response.ok) {
+                  throw new Error('Failed to fetch properties');
+                }
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Error fetching properties:', error);
+          return [];
+        }
+  };
