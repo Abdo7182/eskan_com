@@ -99,9 +99,8 @@ export const SearchFilters = ({ onSearch, initialArea }: SearchFiltersProps) => 
                       ))
 ) : (
             null
-                          )}
+                          )
                             </SelectContent>
-                              )}
                           </Select>
             </div>
 
