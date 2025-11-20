@@ -14,7 +14,7 @@ interface Property {
   name: string;
   address: string;
   price: number;
-  area?: { id: number; name: string };
+    area?: string;
   rooms?: number;
   type?: string;
   furnished?: boolean;
