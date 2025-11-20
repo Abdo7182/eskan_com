@@ -98,8 +98,7 @@ export const SearchFilters = ({ onSearch, initialArea }: SearchFiltersProps) => 
                         </SelectItem>
                       ))
                     ) : (
-                      <SelectItem value="">لا توجد مناطق</SelectItem>
-                    )}
+ <SelectItem value="no-areas" disabled>لا توجد مناطق</SelectItem>                    )}
                   </SelectContent>
                 </Select>
               )}
