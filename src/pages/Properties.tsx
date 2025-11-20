@@ -34,7 +34,7 @@ const Properties: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     // Use mock properties directly
-    const data = mockProperties;
+    const data =amockProperties;
     setProperties(data);
     setFilteredProperties(
       initialArea
