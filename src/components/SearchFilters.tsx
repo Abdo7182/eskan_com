@@ -91,7 +91,7 @@ export const SearchFilters = ({ onSearch, initialArea }: SearchFiltersProps) => 
                     <SelectValue placeholder="اختر المنطقة" />
                   </SelectTrigger>
                   <SelectContent>
-                    {areas.length > 0 ? (
+    {               {areas.length > 0 ? (
                       areas.map((a) => (
                         <SelectItem key={a.id} value={a.name}>
                           {a.name}
@@ -99,7 +99,7 @@ export const SearchFilters = ({ onSearch, initialArea }: SearchFiltersProps) => 
                       ))
 ) : (
             null
-                          )
+                          )}
                             </SelectContent>
                           </Select>
             </div>
