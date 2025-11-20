@@ -130,8 +130,7 @@ const Properties: React.FC = () => {
                 {filteredProperties.map((property) => {
                   const imageUrl =
                     property.images && property.images.length > 0
- ? property.images[0] : "https://via.placeholder.com/400x300?text=No+Image";                      : "https://via.placeholder.com/400x300?text=No+Image";
-
+    ? property.images[0] : "https://via.placeholder.com/400x300?text=No+Image";
                   return (
                     <PropertyCard
                       key={property.id}
