@@ -18,8 +18,7 @@ interface Property {
   rooms?: number;
   type?: string;
   furnished?: boolean;
-  images: { image_url: string }[];
-}
+ images: string[];}
 
 const Properties: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -131,8 +130,7 @@ const Properties: React.FC = () => {
                 {filteredProperties.map((property) => {
                   const imageUrl =
                     property.images && property.images.length > 0
-                      ? property.images[0].image_url
-                      : "https://via.placeholder.com/400x300?text=No+Image";
+ ? property.images[0] : "https://via.placeholder.com/400x300?text=No+Image";                      : "https://via.placeholder.com/400x300?text=No+Image";
 
                   return (
                     <PropertyCard
