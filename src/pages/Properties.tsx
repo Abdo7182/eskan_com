@@ -41,8 +41,8 @@ const Properties: React.FC = () => {
         ? data.filter(
             (p) =>
               p.area &&
-              (p.area.name === initialArea ||
-                p.area.id?.toString() === initialArea)
+              (p.area === initialArea ||
+                                p.area === initialArea)
           )
         : data
     );
@@ -58,7 +58,7 @@ const Properties: React.FC = () => {
       filtered = filtered.filter(
         (p) =>
           p.area &&
-          (p.area.name === filters.area ||
+          (p.area === filters.area ||
             p.area.id?.toString() === filters.area)
       );
     }
