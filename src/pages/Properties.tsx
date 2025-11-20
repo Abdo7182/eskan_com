@@ -33,7 +33,8 @@ const Properties: React.FC = () => {
   useEffect(async () => {
     setLoading(true);
     // Use mock properties directly
-    const data = (await axios.get(`${API_URL}/properties/`)).data
+    try {
+      const data = (await axios.get(`${API_URL}/properties/`)).data
       ;
     setProperties(data);
     setFilteredProperties(
@@ -47,7 +48,11 @@ const Properties: React.FC = () => {
         : data
     );
     setLoading(false);
-  }, [initialArea]);
+          } catch (error) {
+      console.error('Error fetching properties:', error);
+      setLoading(false);
+    }
+  }, []);
   // 🔍 وظيفة البحث والفلترة
   const handleSearch = (filters: any) => {
     setFilters(filters);
