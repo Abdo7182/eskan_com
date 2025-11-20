@@ -99,9 +99,9 @@ export const SearchFilters = ({ onSearch, initialArea }: SearchFiltersProps) => 
                       ))
                     ) : (
  <SelectItem value="no-areas" disabled>لا توجد مناطق</SelectItem>                   
-                  </SelectContent>
-                </Select>
-              )}
+                  )}
+                            </SelectContent>
+                          </Select>
             </div>
 
             {/* 🔹 عدد الغرف */}
