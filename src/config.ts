@@ -4,3 +4,5 @@ export const API_ENDPOINTS = {
   properties: `${API_URL}/properties/`,
   areas: `${API_URL}/areas/`,
 };
+
+// Connected to PythonAnywhere backend
