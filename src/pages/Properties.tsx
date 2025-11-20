@@ -30,10 +30,11 @@ const Properties: React.FC = () => {
   const [filters, setFilters] = useState<any>({});
 
   // 🔹 جلب العقارات من الـ API
-  useEffect(() => {
+  useEffect(async () => {
     setLoading(true);
     // Use mock properties directly
-    const data = mockProperties;
+    const data = (await axios.get(`${API_URL}/properties/`)).data
+      ;
     setProperties(data);
     setFilteredProperties(
       initialArea
