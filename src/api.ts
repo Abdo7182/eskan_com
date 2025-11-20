@@ -1,4 +1,4 @@
-export const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://abdo238923.pythonanywhere.com/api/
+export const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://abdo238923.pythonanywhere.com/api";
 export async function fetchProperties() {
   const res = await fetch(`${API_BASE}/properties/`);
   if (!res.ok) throw new Error("Failed to fetch properties");
