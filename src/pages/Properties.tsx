@@ -140,7 +140,7 @@ const Properties: React.FC = () => {
                   return (
                     <PropertyCard
                       key={property.id}
-                      property={{ ...property, image: imageUrl }}
+                      property={{ ...property, imageimages: [imageUrl] }}
                     />
                   );
                 })}
