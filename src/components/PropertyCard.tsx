@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Star } from "lucide-react"; // ✅ بدل Heart بـ Star
 
 
-const backendUrl = "http://127.0.0.1:8000";
+const backendUrl = "https://abdo238923.pythonanywhere.com";
 
 interface PropertyCardProps {
   property: Property;
@@ -27,14 +27,16 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
     <Card className="property-card overflow-hidden group">
       <div className="relative h-64 overflow-hidden">
         {/* ✅ عرض الصورة */}
-        <img
-          src={
-            property.images?.length > 0
-? `${backendUrl1}${property.images[0]}`              : "/default.jpg"
-          }
-          alt={property.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        />
+          <img
+            src={
+              property.images?.length > 0
+                ? `${backendUrl}${property.images[0]}`
+                : "/default.jpg"
+            }
+            alt={property.name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+
 
         <div className="card-gradient-overlay absolute inset-0" />
 
