@@ -17,8 +17,7 @@ interface Property {
   rooms?: number;
   type?: string;
   furnished?: boolean;
-  images: string[];
-}
+ images: { image_url: string }[];}
 
 const Properties: React.FC = () => {
   const [searchParams] = useSearchParams();
