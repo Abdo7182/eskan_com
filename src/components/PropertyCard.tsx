@@ -30,11 +30,7 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
         ========================== */}
         <img
           src={
-            property.images?.length > 0
-              ? property.images[0]?.startsWith("http")
-                ? property.images[0]
-                : `${backendUrl}${property.images[0]}`
-              : "/default.jpg"
+            property.images?.[0]?.image_url ? property.images[0].image_url : "/default.jpg"
           }
           alt={property.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
