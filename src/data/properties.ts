@@ -12,8 +12,7 @@ export interface Property {
   furnished: boolean;
   type: string;
   typeEn: string;
-  images: string[];
-  description: string;
+ images: { image_url: string }[];  description: string;
   descriptionEn: string;
   contact: string;
   featured?: boolean;
