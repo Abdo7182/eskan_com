@@ -6,19 +6,19 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { SearchFilters } from "@/components/SearchFilters";
 import { useSearchParams } from "react-router-dom";
 import { API_URL } from "@/config";
-import { mockProperties } from "@/data/properties";
 
-// 👇 تعريف نوع العقار اللي بيجي من Django
+// 👇 نوع بيانات العقار القادم من Django
 interface Property {
   id: string;
   name: string;
   address: string;
   price: number;
-    area?: string;
+  area?: string;
   rooms?: number;
   type?: string;
   furnished?: boolean;
- images: string[];}
+  images: string[];
+}
 
 const Properties: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -27,53 +27,43 @@ const Properties: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState<any>({});
 
-  // 🔹 جلب العقارات من الـ API
-  useEffect(async () => {
-    setLoading(true);
-    // Use mock properties directly
-    try {
-      const data = (await axios.get(`${API_URL}/properties/`)).data
-      ;
-    setProperties(data);
-    setFilteredProperties(
-      initialArea
-        ? data.filter(
-            (p) =>
-              p.area &&
-              (p.area === initialArea ||
-                                p.area === initialArea)
-          )
-        : data
-    );
-    setLoading(false);
-          } catch (error) {
-      console.error('Error fetching properties:', error);
-      setLoading(false);
-    }
-  }, []);
-  // 🔍 وظيفة البحث والفلترة
+  // 🔹 جلب العقارات من API
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setLoading(true);
+      try {
+        const { data } = await axios.get(`${API_URL}/properties/`);
+        setProperties(data);
+
+        // لو فيه Area جاية من الرابط
+        setFilteredProperties(
+          initialArea
+            ? data.filter((p: Property) => p.area === initialArea)
+            : data
+        );
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, [initialArea]);
+
+  // 🔍 الفلاتر
   const handleSearch = (filters: any) => {
-    setFilters(filters);
     let filtered = [...properties];
 
-    // ✅ فلترة حسب المنطقة (الآن يعمل بشكل صحيح)
     if (filters.area) {
-      filtered = filtered.filter(
-        (p) =>
-          p.area &&
-          (p.area === filters.area ||
-            p.area.id?.toString() === filters.area)
-      );
+      filtered = filtered.filter((p) => p.area === filters.area);
     }
 
     if (filters.rooms) {
       const roomCount = filters.rooms === "5+" ? 5 : parseInt(filters.rooms);
       filtered = filtered.filter((p) =>
-        filters.rooms === "5+"
-          ? p.rooms! >= roomCount
-          : p.rooms === roomCount
+        filters.rooms === "5+" ? p.rooms! >= roomCount : p.rooms === roomCount
       );
     }
 
@@ -102,7 +92,6 @@ const Properties: React.FC = () => {
       <Navbar />
 
       <main className="flex-1 mt-16">
-        {/* هيدر الصفحة */}
         <div className="bg-primary/5 py-12">
           <div className="container mx-auto px-4">
             <h1 className="text-4xl font-bold mb-2">عقارات للإيجار</h1>
@@ -114,7 +103,6 @@ const Properties: React.FC = () => {
           </div>
         </div>
 
-        {/* الفلاتر والنتائج */}
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8">
             <SearchFilters onSearch={handleSearch} initialArea={initialArea} />
@@ -135,12 +123,13 @@ const Properties: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProperties.map((property) => {
                   const imageUrl =
-                    property.images && property.images.length > 0
-    ? property.images[0] : "https://via.placeholder.com/400x300?text=No+Image";
+                    property.images?.[0] ||
+                    "https://via.placeholder.com/400x300?text=No+Image";
+
                   return (
                     <PropertyCard
                       key={property.id}
-                      property={{ ...property, imageimages: [imageUrl] }}
+                      property={{ ...property, images: [imageUrl] }}
                     />
                   );
                 })}
