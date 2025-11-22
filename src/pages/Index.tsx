@@ -180,3 +180,4 @@ const FeatureCard = ({ icon, title, text }: { icon: React.ReactNode; title: stri
     <p className="text-sm text-muted-foreground">{text}</p>
   </div>
 );
+ 
