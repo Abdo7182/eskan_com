@@ -7,17 +7,22 @@ import { SearchFilters } from "@/components/SearchFilters";
 import { useSearchParams } from "react-router-dom";
 import { API_URL } from "@/config";
 
-// 👇 نوع بيانات العقار القادم من Django
+// تعريف واجهة البيانات
 interface Property {
   id: string;
   name: string;
   address: string;
   price: number;
-  area?: string;
+  area?: any; // جعلناها any لتقبل كائن أو نص
   rooms?: number;
+  bathrooms?: number;
+  size?: number;
   type?: string;
   furnished?: boolean;
- images: { image_url: string }[];}
+  floor?: number;
+  featured?: boolean;
+  images: { image_url: string }[];
+}
 
 const Properties: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -27,7 +32,7 @@ const Properties: React.FC = () => {
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 جلب العقارات من API
+  // جلب البيانات
   useEffect(() => {
     const fetchProperties = async () => {
       setLoading(true);
@@ -35,10 +40,12 @@ const Properties: React.FC = () => {
         const { data } = await axios.get(`${API_URL}/properties/`);
         setProperties(data);
 
-        // لو فيه Area جاية من الرابط
         setFilteredProperties(
           initialArea
-            ? data.filter((p: Property) => p.area === initialArea)
+            ? data.filter((p: Property) => {
+                const pArea = typeof p.area === 'object' ? p.area.name : p.area;
+                return pArea === initialArea;
+              })
             : data
         );
       } catch (error) {
@@ -51,18 +58,21 @@ const Properties: React.FC = () => {
     fetchProperties();
   }, [initialArea]);
 
-  // 🔍 الفلاتر
+  // الفلاتر
   const handleSearch = (filters: any) => {
     let filtered = [...properties];
 
     if (filters.area) {
-      filtered = filtered.filter((p) => p.area === filters.area);
+      filtered = filtered.filter((p) => {
+        const pArea = typeof p.area === 'object' ? p.area.name : p.area;
+        return pArea === filters.area;
+      });
     }
 
     if (filters.rooms) {
       const roomCount = filters.rooms === "5+" ? 5 : parseInt(filters.rooms);
       filtered = filtered.filter((p) =>
-        filters.rooms === "5+" ? p.rooms! >= roomCount : p.rooms === roomCount
+        filters.rooms === "5+" ? (p.rooms || 0) >= roomCount : p.rooms === roomCount
       );
     }
 
@@ -120,15 +130,13 @@ const Properties: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProperties.map((property) => {
-return (
-            <PropertyCard
-              key={property.id}
-              property={property}
-            />
-          );                    />
-                  );
-                })}
+                {/* هنا تم إصلاح الخطأ في الأقواس */}
+                {filteredProperties.map((property) => (
+                  <PropertyCard
+                    key={property.id}
+                    property={property}
+                  />
+                ))}
               </div>
             </>
           ) : (
