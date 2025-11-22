@@ -7,13 +7,20 @@ import { SearchFilters } from "@/components/SearchFilters";
 import { useSearchParams } from "react-router-dom";
 import { API_URL } from "@/config";
 
-// تعريف واجهة البيانات
+
+// ----------- Interfaces -----------
+
+interface Area {
+  id: number;
+  name: string;
+}
+
 interface Property {
   id: string;
   name: string;
   address: string;
   price: number;
-  area?: any; // جعلناها any لتقبل كائن أو نص
+  area?: Area | string;
   rooms?: number;
   bathrooms?: number;
   size?: number;
@@ -24,6 +31,17 @@ interface Property {
   images: { image_url: string }[];
 }
 
+interface Filters {
+  area: string;
+  rooms: string;
+  propertyType: string;
+  furnished: string;
+  priceRange: number[];
+}
+
+
+// ----------- Component -----------
+
 const Properties: React.FC = () => {
   const [searchParams] = useSearchParams();
   const initialArea = searchParams.get("area") || "";
@@ -32,18 +50,22 @@ const Properties: React.FC = () => {
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // جلب البيانات
+
+  // ----------- Fetch Data -----------
+
   useEffect(() => {
     const fetchProperties = async () => {
       setLoading(true);
+
       try {
         const { data } = await axios.get(`${API_URL}/properties/`);
         setProperties(data);
 
+        // Filter by area from URL (if exists)
         setFilteredProperties(
           initialArea
             ? data.filter((p: Property) => {
-                const pArea = typeof p.area === 'object' ? p.area.name : p.area;
+                const pArea = typeof p.area === "object" ? p.area.name : p.area;
                 return pArea === initialArea;
               })
             : data
@@ -58,34 +80,46 @@ const Properties: React.FC = () => {
     fetchProperties();
   }, [initialArea]);
 
-  // الفلاتر
-  const handleSearch = (filters: any) => {
+
+  // ----------- Handle Filters -----------
+
+  const handleSearch = (filters: Filters) => {
     let filtered = [...properties];
 
+    // Filter by Area
     if (filters.area) {
       filtered = filtered.filter((p) => {
-        const pArea = typeof p.area === 'object' ? p.area.name : p.area;
+        const pArea = typeof p.area === "object" ? p.area.name : p.area;
         return pArea === filters.area;
       });
     }
 
+    // Filter by Rooms
     if (filters.rooms) {
-      const roomCount = filters.rooms === "5+" ? 5 : parseInt(filters.rooms);
-      filtered = filtered.filter((p) =>
-        filters.rooms === "5+" ? (p.rooms || 0) >= roomCount : p.rooms === roomCount
-      );
+      const roomCount = filters.rooms === "5+" ? 5 : Number(filters.rooms);
+
+      filtered = filtered.filter((p) => {
+        const propertyRooms = Number(p.rooms ?? 0);
+
+        return filters.rooms === "5+"
+          ? propertyRooms >= roomCount
+          : propertyRooms === roomCount;
+      });
     }
 
+    // Filter by Property Type
     if (filters.propertyType) {
       filtered = filtered.filter((p) => p.type === filters.propertyType);
     }
 
+    // Filter by Furnished
     if (filters.furnished !== "") {
       const isFurnished = filters.furnished === "true";
       filtered = filtered.filter((p) => p.furnished === isFurnished);
     }
 
-    if (filters.priceRange) {
+    // Filter by Price Range
+    if (filters.priceRange.length === 2) {
       filtered = filtered.filter(
         (p) =>
           Number(p.price) >= filters.priceRange[0] &&
@@ -96,11 +130,15 @@ const Properties: React.FC = () => {
     setFilteredProperties(filtered);
   };
 
+
+  // ----------- UI -----------
+
   return (
     <div className="min-h-screen flex flex-col" dir="rtl">
       <Navbar />
 
       <main className="flex-1 mt-16">
+        {/* Header section */}
         <div className="bg-primary/5 py-12">
           <div className="container mx-auto px-4">
             <h1 className="text-4xl font-bold mb-2">عقارات للإيجار</h1>
@@ -112,6 +150,7 @@ const Properties: React.FC = () => {
           </div>
         </div>
 
+        {/* Filters + List */}
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8">
             <SearchFilters onSearch={handleSearch} initialArea={initialArea} />
@@ -130,12 +169,8 @@ const Properties: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* هنا تم إصلاح الخطأ في الأقواس */}
                 {filteredProperties.map((property) => (
-                  <PropertyCard
-                    key={property.id}
-                    property={property}
-                  />
+                  <PropertyCard key={property.id} property={property} />
                 ))}
               </div>
             </>
