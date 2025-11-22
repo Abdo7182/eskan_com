@@ -102,28 +102,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Properties */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">
-            أحدث العقارات المضافة
-          </h2>
-
-          {loading ? (
-            <div className="text-center">جارٍ التحميل...</div>
-          ) : properties.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {properties.map((p) => (
-                <PropertyCard key={p.id} property={p} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-muted-foreground">
-              لا توجد عقارات حالياً.
-            </p>
-          )}
-        </div>
-      </section>
 
       {/* Areas */}
       {/* <section className="py-16 bg-accent/30">
