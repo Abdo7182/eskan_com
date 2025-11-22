@@ -80,6 +80,7 @@ export const SearchFilters = ({ onSearch, initialArea }: SearchFiltersProps) => 
 
           {/* Filters Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            
             {/* 🔹 المنطقة */}
             <div className="space-y-2">
               <Label>المنطقة</Label>
@@ -90,18 +91,22 @@ export const SearchFilters = ({ onSearch, initialArea }: SearchFiltersProps) => 
                   <SelectTrigger>
                     <SelectValue placeholder="اختر المنطقة" />
                   </SelectTrigger>
+
                   <SelectContent>
-    {               {areas.length > 0 ? (
+                    {areas.length > 0 ? (
                       areas.map((a) => (
                         <SelectItem key={a.id} value={a.name}>
                           {a.name}
                         </SelectItem>
                       ))
-) : (
-            null
-                          )}
-                            </SelectContent>
-                          </Select>
+                    ) : (
+                      <SelectItem value="no-areas" disabled>
+                        لا توجد مناطق متاحة
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
 
             {/* 🔹 عدد الغرف */}
