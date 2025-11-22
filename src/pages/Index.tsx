@@ -1,29 +1,14 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { PropertyCard } from "@/components/PropertyCard";
 import { AreaCard } from "@/components/AreaCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Building2, Shield, Clock, Award } from "lucide-react";
 import { alexandriaAreas } from "@/data/properties";
 import { Link } from "react-router-dom";
-import { fetchProperties } from "@/data/properties";
-import { Property as PropertyType } from "@/data/properties";
 
 const Index = () => {
-  const [properties, setProperties] = useState<PropertyType[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchProperties()
-      .then((data) => {
-        // يمكنك تخصيص العدد أو التصفية (مثل featured فقط)
-        setProperties(data.slice(0, 6));
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
 
   const displayAreas = alexandriaAreas.slice(0, 8);
 
@@ -33,9 +18,7 @@ const Index = () => {
 
       {/* Hero Section */}
       <section className="relative h-[600px] flex items-center justify-center overflow-hidden mt-16">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-        />
+        <div className="absolute inset-0 bg-cover bg-center" />
         <div className="absolute inset-0 hero-gradient" />
 
         <div className="container mx-auto px-4 relative z-10">
@@ -57,19 +40,6 @@ const Index = () => {
                 </Link>
               </Button>
             </div>
-
-            {/* <div className="bg-white rounded-lg p-2 shadow-xl max-w-2xl mx-auto">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="ابحث عن منطقة أو عقار..."
-                  className="border-0 text-lg"
-                />
-                <Button size="lg" className="gap-2">
-                  <Search className="h-5 w-5" />
-                  بحث
-                </Button>
-              </div>
-            </div> */}
           </div>
         </div>
       </section>
@@ -102,33 +72,6 @@ const Index = () => {
         </div>
       </section>
 
-
-      {/* Areas */}
-      {/* <section className="py-16 bg-accent/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-2">استكشف مناطق الإسكندرية</h2>
-            <p className="text-muted-foreground">اختر المنطقة المفضلة لديك</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {displayAreas.map((area) => (
-              <AreaCard
-                key={area}
-                area={area}
-                propertyCount={Math.floor(Math.random() * 50) + 10}
-              />
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <Button asChild variant="outline" size="lg">
-              <Link to="/properties">عرض جميع المناطق</Link>
-            </Button>
-          </div>
-        </div>
-      </section> */}
-
       {/* CTA Section */}
       <section className="py-20 hero-gradient text-white">
         <div className="container mx-auto px-4 text-center">
@@ -158,4 +101,3 @@ const FeatureCard = ({ icon, title, text }: { icon: React.ReactNode; title: stri
     <p className="text-sm text-muted-foreground">{text}</p>
   </div>
 );
- 
