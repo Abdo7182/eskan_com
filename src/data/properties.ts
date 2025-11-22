@@ -184,7 +184,7 @@ images: property.images?.map((img: any) => {
       if (!url) return null;
       if (url.startsWith('http')) return url;
       return `${apiBaseUrl}${url}`;
-    }).filter(Boolean) || []
+    }).filter(Boolean) || [],
       description: property.description,
       descriptionEn: property.description_en || '',
       contact: property.contact,
