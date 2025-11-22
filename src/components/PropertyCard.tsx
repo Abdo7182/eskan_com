@@ -1,4 +1,3 @@
-import { Property } from "../data/properties";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -6,10 +5,12 @@ import { Bed, Bath, Maximize2, MapPin, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
+// تأكد من أن هذا الرابط صحيح ويعمل
 const backendUrl = "https://abdo238923.pythonanywhere.com";
 
+// استخدام any هنا لتجنب أي مشاكل في التوافق، يمكنك استيراد الواجهة الموحدة لاحقاً
 interface PropertyCardProps {
-  property: Property;
+  property: any;
 }
 
 export const PropertyCard = ({ property }: PropertyCardProps) => {
@@ -21,54 +22,34 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
       ? property.area.name
       : property.area || "غير محدد";
 
+  // دالة لاستخراج رابط الصورة الصحيح
+  const getImageUrl = () => {
+    const img = property.images?.[0]?.image_url;
+    if (!img) return "/default.jpg"; // صورة بديلة في حال عدم وجود صور
+    
+    // إذا كان الرابط كامل (يبدأ بـ http) نرجعه كما هو
+    if (img.startsWith('http')) return img;
+    
+    // إذا كان الرابط نسبي، نضيف الدومين قبله
+    return `${backendUrl}${img}`;
+  };
+
   return (
     <Card className="property-card overflow-hidden group">
       <div className="relative h-64 overflow-hidden">
 
-        {/* =======================
-            عرض الصورة + fallback
-        ========================== */}
+        {/* عرض الصورة باستخدام الدالة المصححة */}
         <img
-          src={
-            property.images?.[0]?.image_url ? property.images[0].image_url : "/default.jpg"
-          }
+          src={getImageUrl()}
           alt={property.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           onError={(e) => {
-            e.currentTarget.onerror = null; // منع إعادة التحميل
+            e.currentTarget.onerror = null;
             const parent = e.currentTarget.parentElement;
-
-            e.currentTarget.style.display = "none"; // إخفاء الصورة
-
+            e.currentTarget.style.display = "none";
             if (parent) {
               parent.innerHTML = `
-                <div style="
-                  width: 100%;
-                  height: 100%;
-                  background: #f3f3f3;
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: center;
-                  align-items: center;
-                  gap: 8px;
-                  color: #666;
-                  font-size: 16px;
-                ">
-                  <svg xmlns="http://www.w3.org/2000/svg" 
-                    width="42" 
-                    height="42" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="#888" 
-                    stroke-width="2" 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round"
-                  >
-                    <path d="M2 2l20 20"></path>
-                    <path d="M9.5 9.5L4 4h4l2-2h4l2 2h4l-4 4"></path>
-                    <path d="M21 21H3a1 1 0 0 1-1-1V8"></path>
-                    <path d="M8.32 8.32a4 4 0 1 0 5.36 5.36"></path>
-                  </svg>
+                <div style="width:100%; height:100%; background:#f3f3f3; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#666;">
                   <span>الصورة غير متاحة</span>
                 </div>
               `;
@@ -91,7 +72,10 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
           size="icon"
           variant="secondary"
           className="absolute top-4 right-4"
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={(e) => {
+             e.preventDefault(); 
+             setIsFavorite(!isFavorite);
+          }}
         >
           <Star
             className={`h-4 w-4 ${
@@ -105,7 +89,7 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
           <div className="bg-background/95 backdrop-blur-sm px-4 py-2 rounded-lg">
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-bold text-primary">
-                {property.price.toLocaleString()}
+                {property.price?.toLocaleString()}
               </span>
               <span className="text-sm text-muted-foreground">جنيه/شهر</span>
             </div>
@@ -144,11 +128,11 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
 
           {/* الوسوم */}
           <div className="flex gap-2 flex-wrap">
-            <Badge variant="outline">{property.type}</Badge>
+            {property.type && <Badge variant="outline">{property.type}</Badge>}
             <Badge variant="outline">
               {property.furnished ? "مفروشة" : "غير مفروشة"}
             </Badge>
-            <Badge variant="outline">الطابق {property.floor}</Badge>
+            {property.floor && <Badge variant="outline">الطابق {property.floor}</Badge>}
           </div>
 
           {/* الأزرار */}
