@@ -27,8 +27,8 @@ const Navbar = () => {
           >
             <Building2 className="h-8 w-8 text-primary" />
             <div className="flex flex-col">
-              <span className="font-bold text-xl text-primary">Sakn Egypt</span>
-              <span className="text-xs text-muted-foreground">سكن مصر</span>
+              <span className="font-bold text-xl text-primary">Eskan Egypt</span>
+              <span className="text-xs text-muted-foreground">اسكان مصر</span>
             </div>
           </Link>
 
