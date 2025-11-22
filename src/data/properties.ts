@@ -179,7 +179,12 @@ export const fetchProperties = async (): Promise<Property[]> => {
       furnished: property.furnished,
       type: property.type,
       typeEn: property.type_en || '',
-      images: property.images?.map((img: any) => img.image_url || img) || [],
+      images: property.images?.map((img: any) => img.image_url || .map((img: any) => {
+      const url = img.image_url || img;
+      if (!url) return null;
+      if (url.startsWith('http')) return url;
+      return `${apiBaseUrl}${url}`;
+    }).filter(Boolean)img) || [],
       description: property.description,
       descriptionEn: property.description_en || '',
       contact: property.contact,
