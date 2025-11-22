@@ -1,38 +1,16 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PropertyCard } from "@/components/PropertyCard";
-import { SearchFilters } from "@/components/SearchFilters";
-import { useSearchParams } from "react-router-dom";
-import { API_URL } from "@/config";
+import { AreaCard } from "@/components/AreaCard";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search, Building2, Shield, Clock, Award } from "lucide-react";
+import { alexandriaAreas } from "@/data/properties";
+import { Link } from "react-router-dom";
+import { fetchProperties } from "@/data/properties";
+import { Property as PropertyType } from "@/data/properties";
 
-// تعريف واجهة البيانات
-interface Property {
-  id: string;
-  name: string;
-  address: string;
-  price: number;
-  area?: any; // جعلناها any لتقبل كائن أو نص
-  rooms?: number;
-  bathrooms?: number;
-  size?: number;
-  type?: string;
-  furnished?: boolean;
-  floor?: number;
-  featured?: boolean;
-  images: { image_url: string }[];
-}
-
-const Properties: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const initialArea = searchParams.get("area") || "";
-
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // جلب البيانات
 const Index = () => {
   const [properties, setProperties] = useState<PropertyType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -192,101 +170,13 @@ const Index = () => {
     </div>
   );
 };
-  // الفلاتر
-  const handleSearch = (filters: any) => {
-    let filtered = [...properties];
 
-    if (filters.area) {
-      filtered = filtered.filter((p) => {
-        const pArea = typeof p.area === 'object' ? p.area.name : p.area;
-        return pArea === filters.area;
-      });
-    }
+export default Index;
 
-    if (filters.rooms) {
-      const roomCount = filters.rooms === "5+" ? 5 : parseInt(filters.rooms);
-      filtered = filtered.filter((p) =>
-        filters.rooms === "5+" ? (p.rooms || 0) >= roomCount : p.rooms === roomCount
-      );
-    }
-
-    if (filters.propertyType) {
-      filtered = filtered.filter((p) => p.type === filters.propertyType);
-    }
-
-    if (filters.furnished !== "") {
-      const isFurnished = filters.furnished === "true";
-      filtered = filtered.filter((p) => p.furnished === isFurnished);
-    }
-
-    if (filters.priceRange) {
-      filtered = filtered.filter(
-        (p) =>
-          Number(p.price) >= filters.priceRange[0] &&
-          Number(p.price) <= filters.priceRange[1]
-      );
-    }
-
-    setFilteredProperties(filtered);
-  };
-
-  return (
-    <div className="min-h-screen flex flex-col" dir="rtl">
-      <Navbar />
-
-      <main className="flex-1 mt-16">
-        <div className="bg-primary/5 py-12">
-          <div className="container mx-auto px-4">
-            <h1 className="text-4xl font-bold mb-2">عقارات للإيجار</h1>
-            <p className="text-muted-foreground">
-              {initialArea
-                ? `عقارات في ${initialArea}`
-                : "جميع العقارات المتاحة"}
-            </p>
-          </div>
-        </div>
-
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <SearchFilters onSearch={handleSearch} initialArea={initialArea} />
-          </div>
-
-          {loading ? (
-            <div className="text-center text-gray-500 py-20">
-              جارٍ تحميل العقارات...
-            </div>
-          ) : filteredProperties.length > 0 ? (
-            <>
-              <div className="flex items-center justify-between mb-6">
-                <p className="text-muted-foreground">
-                  عرض {filteredProperties.length} عقار
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* هنا تم إصلاح الخطأ في الأقواس */}
-                {filteredProperties.map((property) => (
-                  <PropertyCard
-                    key={property.id}
-                    property={property}
-                  />
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className="text-center py-20">
-              <h3 className="text-2xl font-bold mb-2">لا توجد نتائج</h3>
-              <p className="text-muted-foreground">
-                جرب تعديل معايير البحث للعثور على عقارات مناسبة
-              </p>
-            </div>
-          )}
-        </div>
-      </main>
-
-      <Footer />
-    </div>
-  );
-};
-
-export default Properties;
+const FeatureCard = ({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) => (
+  <div className="text-center space-y-3">
+    <div className="inline-flex p-4 bg-primary/10 rounded-full">{icon}</div>
+    <h3 className="font-bold text-lg">{title}</h3>
+    <p className="text-sm text-muted-foreground">{text}</p>
+  </div>
+);
