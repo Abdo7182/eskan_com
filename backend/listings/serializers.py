@@ -46,3 +46,10 @@ class PropertySerializer(serializers.ModelSerializer):
             'size', 'floor', 'furnished', 'type', 'type_en', 'description', 'description_en',
             'contact', 'featured', 'images', 'videos', 'created_at'
         )
+
+class GalleryImageSerializer(serializers.ModelSerializer):
+    property_name = serializers.CharField(source='property.name', read_only=True)
+    
+    class Meta:
+        model = PropertyImage
+        fields = ('id', 'image', 'image_url', 'order', 'property', 'property_name')
